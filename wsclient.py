@@ -6,14 +6,15 @@ import time
 import rel
 
 with open("config.json", "r") as f:
-    data = orjson.dumps(f.read())
+    data = orjson.loads(f.read())
     drone_name = data["drone_name"]
     drone_info = data["drone_info"]
     drone_status = data["drone_status"]
 
 
 def send_status():
-    while True:
+    global connected
+    while connected:
         time.sleep(5)
         data = {
             "type" : "status",
@@ -35,32 +36,35 @@ def on_error(ws, error):
     print("Error occur :",error)
 
 def on_close(ws, close_status_code, close_msg):
-    pass
+    global connected
+    connected = False
 
 def on_open(ws):
-    pass
-
-
-if __name__ == "__main__":
-
-    websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("ws://sqcs.tw:8011",
-                              on_open=on_open,
-                              on_message=on_message,
-                              on_error=on_error,
-                              on_close=on_close)
-
-    ws.run_forever(dispatcher=rel, reconnect=5)  
-    rel.signal(2, rel.abort) 
-    rel.dispatch()
-
+    global connected
+    connected = True
     data = {
         "type" : "init",
         "timestamp" : datetime.now(),
         "drone_name" : drone_name,
         "drone_info" : drone_info
     }
-    ws.send(orjson.dumps(data,option= orjson.OPT_NAIVE_UTC))
-    
-    status_sending_thread = threading.Thread(target=send_status)
+    ws.send(orjson.dumps(data, option = orjson.OPT_NAIVE_UTC))
+    time.sleep(1)
     status_sending_thread.start()
+
+
+if __name__ == "__main__":
+    global connected
+    status_sending_thread = threading.Thread(target=send_status)
+
+    connected = True
+    websocket.enableTrace(True)
+    ws = websocket.WebSocketApp("ws://sqcs.tw:8011",
+                              on_open = on_open,
+                              on_message = on_message,
+                              on_error = on_error,
+                              on_close = on_close )
+
+    ws.run_forever(dispatcher = rel, reconnect = 5)  
+    rel.signal(2, rel.abort)
+    rel.dispatch()
