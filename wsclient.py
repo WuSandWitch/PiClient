@@ -5,14 +5,12 @@ from datetime import datetime
 import time
 import rel
 
+with open("config.json", "r") as f:
+    data = orjson.dumps(f.read())
+    drone_name = data["drone_name"]
+    drone_info = data["drone_info"]
+    drone_status = data["drone_status"]
 
-drone_name = input("input drone name:")
-drone_info = {
-    "test_info" : "test"
-}
-drone_status = {
-    "test_status" : "test"
-}
 
 def send_status():
     while True:

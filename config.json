@@ -1,0 +1,11 @@
+{
+    "drone_name" : "test drone1",
+    "drone_info" : {
+        "speed" : "20",
+        "test" : "test"
+    },
+    "drone_status" : {
+        "current_activity" : "",
+        "test" : "test"
+    }
+}
