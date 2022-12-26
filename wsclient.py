@@ -14,8 +14,10 @@ with open("config.json", "r") as f:
 
 def send_status():
     global connected
-    while connected:
+    while True:
         time.sleep(5)
+        if not connected:
+            continue
         data = {
             "type" : "status",
             "timestamp" : datetime.now(),
