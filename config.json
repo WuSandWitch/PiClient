@@ -1,11 +1,11 @@
 {
-    "drone_name" : "test drone1",
+    "drone_name" : "飛天汽笛號",
     "drone_info" : {
-        "speed" : "20",
-        "test" : "test"
+        "test_info1" : "test",
+        "test_info2" : "test"
     },
     "drone_status" : {
-        "current_activity" : "",
-        "test" : "test"
+        "test_status1" : "test",
+        "test_status2" : "test"
     }
 }
