@@ -2,3 +2,5 @@ websocket-client
 orjson
 rel
 python-dotenv
+dronekit
+drontkit-sitl
